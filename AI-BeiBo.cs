@@ -27,7 +27,8 @@ namespace RemarkUI
         Thread SockListening = null;
         bool ClrThread = false;     //是否需要清除释放线程
         bool GetReceive = false;
-        bool UnCompeleted = false;
+        bool ShowConfig = false;
+        bool ISSave = false;
         public List<Button> BTN = new List<Button>();//获取的需要在界面上显示的标记位置
         public List<System.Drawing.Point> BTN999 = new List<System.Drawing.Point>();//获取的999值存储的标记位置
         public List<System.Drawing.Point> Remove1 = new List<System.Drawing.Point>();
@@ -46,7 +47,6 @@ namespace RemarkUI
         string hwRadio = "0";
         string Maxcontours = "0";
         string aeraRadio = "0";
-        public string test = "?";
         public int index = 0;
         public int Pnum = 0, ign1 = 0, ign2 = 0;
         public remark()
@@ -79,14 +79,13 @@ namespace RemarkUI
                     break;
                 }
             }
-            
-            tcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint sendiPEndPoint = new IPEndPoint(IPAddress.Parse(IP), 3128);
-            AllLocation.Text = MyIPAdress.ToString();
-            tcpClient.Connect(sendiPEndPoint);
             try
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(message+ " #END#\0");
+                tcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint sendiPEndPoint = new IPEndPoint(IPAddress.Parse(IP), 3128);
+                AllLocation.Text = MyIPAdress.ToString();
+                tcpClient.Connect(sendiPEndPoint);
+                byte[] bytes = Encoding.ASCII.GetBytes(message + " #END#\0");
 
                 if (SockListening != null)
                 {
@@ -94,6 +93,14 @@ namespace RemarkUI
                         SockListening.Abort();
                     SockListening.DisableComObjectEagerCleanup();
                 }
+                AllLocation.Text = "登录成功！\r\n";
+                AllLocation.Text += "本机IP：" + MyIPAdress.ToString() + "；\r\n";
+                AllLocation.Text += "目标IP：" + IP + "；\r\n\r\n";
+                AllLocation.Text += "使用小提示 : \r\n";
+                AllLocation.Text += "1、若卡顿或无画面时可重新登陆或重启软件解决；\r\n";
+                AllLocation.Text += "2、标记过程中画面卡顿不影响数据本身和操作，但无法观察到区域绘图，可继续完成标记或查看配置后重新登陆解决；\r\n";
+                AllLocation.Text += "3、受配置等因素影响，运行过程中会存在视频链接不稳定情况，不影响正常使用；\r\n";
+                AllLocation.Text += "4、若遇到TCP错误请检查相机配置和算法、软件等是否正常，登陆失败的反馈具有一定延时。";
                 SockListening = new Thread(Receive);
                 SockListening.IsBackground = true;
                 GetReceive = true;
@@ -102,12 +109,11 @@ namespace RemarkUI
             }
             catch
             {
-                MessageBox.Show("发送失败", "提示", MessageBoxButtons.OK);
+                MessageBox.Show("TCP发送请求失败!", "提示", MessageBoxButtons.OK);
                 tcpClient.Disconnect(true);
             }
-
         }
-        //---------------------------------建立UDP并发送请求
+        //---------------------------------建立TCP并发送请求
 
         private void Receive()
         {
@@ -118,9 +124,7 @@ namespace RemarkUI
                 try
                 {
                     string str = "";
-
                     int lenth = tcpClient.ReceiveFrom(rcvBuf, ref iPEndPoint);
-                    test = "Get";
                     if (rcvBuf != null)
                     {
                         str = Encoding.UTF8.GetString(rcvBuf, 0, lenth);
@@ -217,12 +221,12 @@ namespace RemarkUI
                 }
                 catch
                 {
-                    test = "No Listening";
+                    MessageBox.Show("TCP数据接受异常!", "提示", MessageBoxButtons.OK);
                 }
-                
+
             }
         }
-        //---------------------------------UDP获取配置
+        //---------------------------------P获取配置
 
         public void GrabPic()
         {
@@ -240,26 +244,103 @@ namespace RemarkUI
                         try
                         {
                             img = capture.RetrieveMat();
-                            if (BTN.Count >= 2)
+                            if (!ShowConfig)
                             {
-                                float startPX = 0, startPY = 0, endPX = 0, endPY = 0;
-                                for (i = 0; i < BTN.Count - 1; i++)
+                                if (BTN.Count >= 2)
                                 {
-                                    //(btnLocX - skinPictureBox1.Location.X) / skinPictureBox1.Width * 999;
-                                    startPX = (float)(BTN[i].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width-1);
-                                    startPY = (float)(BTN[i].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height-1);
-                                    endPX = (float)(BTN[i + 1].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width-1);
-                                    endPY = (float)(BTN[i + 1].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height-1);
-                                    OpenCvSharp.Point startP0 = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
-                                    OpenCvSharp.Point endP0 = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
-                                    Cv2.Line(img, startP0, endP0, Scalar.Red, 1);
-                                    if (((i + 1 == Pnum - 1) || (i + 1 == ign1 - 1) || (i + 1 == ign2 - 1)) || ((i + 1 == BTN.Count - 1)&&ign1==0&&ign2==0&&Pnum==0))
+                                    float startPX = 0, startPY = 0, endPX = 0, endPY = 0;
+                                    for (i = 0; i < BTN.Count - 1; i++)
                                     {
-                                        startPX = (float)(BTN[0].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width-1);
-                                        startPY = (float)(BTN[0].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height-1);
-                                        OpenCvSharp.Point startP = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
-                                        OpenCvSharp.Point endP = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
-                                        Cv2.Line(img, endP, startP, Scalar.Red, 1);
+                                        //(btnLocX - skinPictureBox1.Location.X) / skinPictureBox1.Width * 999;
+                                        startPX = ((float)BTN[i].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width - 1);
+                                        startPY = ((float)BTN[i].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height - 1);
+                                        endPX = ((float)BTN[i + 1].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width - 1);
+                                        endPY = ((float)BTN[i + 1].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height - 1);
+                                        OpenCvSharp.Point startP0 = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                        OpenCvSharp.Point endP0 = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                        Cv2.Line(img, startP0, endP0, Scalar.Red, 1);
+                                        if (((i + 1 == Pnum - 1) && index == 1 ||
+                                            (i + 1 == ign1 - 1) && index == 2 ||
+                                            (i + 1 == ign2 - 1) && index == 3))
+                                        {
+                                            startPX = ((float)BTN[0].Location.X + 3 - skinPictureBox1.Location.X) / skinPictureBox1.Width * (img.Width - 1);
+                                            startPY = ((float)BTN[0].Location.Y + 3 - skinPictureBox1.Location.Y) / skinPictureBox1.Height * (img.Height - 1);
+                                            OpenCvSharp.Point startP = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                            OpenCvSharp.Point endP = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                            Cv2.Line(img, endP, startP, Scalar.Red, 1);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (BTN999.Count >= 2)
+                                {
+                                    float startPX = 0, startPY = 0, endPX = 0, endPY = 0;
+                                    for (i = 0; i < BTN999.Count - 1; i++)
+                                    {
+                                        //(btnLocX - skinPictureBox1.Location.X) / skinPictureBox1.Width * 999;
+                                        startPX = (float)BTN999[i].X / 999 * (img.Width - 2) + 1;
+                                        startPY = (float)BTN999[i].Y / 999 * (img.Height - 2) + 1;
+                                        endPX = (float)BTN999[i + 1].X / 999 * (img.Width - 2) + 1;
+                                        endPY = (float)BTN999[i + 1].Y / 999 * (img.Height - 2) + 1;
+                                        OpenCvSharp.Point startP0 = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                        OpenCvSharp.Point endP0 = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                        Cv2.Line(img, startP0, endP0, Scalar.Green, 1);
+                                        if ((i + 1 == Pnum - 1) || ((i + 1 == BTN999.Count - 1) && Pnum == 0))
+                                        {
+                                            startPX = (float)BTN999[0].X / 999 * (img.Width - 2) + 1;
+                                            startPY = (float)BTN999[0].Y / 999 * (img.Height - 2) + 1;
+                                            OpenCvSharp.Point startP = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                            OpenCvSharp.Point endP = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                            Cv2.Line(img, endP, startP, Scalar.Green, 1);
+                                        }
+                                    }
+                                }
+                                if (Remove1.Count >= 2)
+                                {
+                                    float startPX = 0, startPY = 0, endPX = 0, endPY = 0;
+                                    for (i = 0; i < Remove1.Count - 1; i++)
+                                    {
+                                        //(btnLocX - skinPictureBox1.Location.X) / skinPictureBox1.Width * 999;
+                                        startPX = (float)Remove1[i].X / 999 * (img.Width - 2) + 1;
+                                        startPY = (float)Remove1[i].Y / 999 * (img.Height - 2) + 1;
+                                        endPX = (float)Remove1[i + 1].X / 999 * (img.Width - 2) + 1;
+                                        endPY = (float)Remove1[i + 1].Y / 999 * (img.Height - 2) + 1;
+                                        OpenCvSharp.Point startP0 = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                        OpenCvSharp.Point endP0 = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                        Cv2.Line(img, startP0, endP0, Scalar.Red, 1);
+                                        if ((i + 1 == ign1 - 1) || ((i + 1 == Remove1.Count - 1) && ign1 == 0))
+                                        {
+                                            startPX = (float)Remove1[0].X / 999 * (img.Width - 2) + 1;
+                                            startPY = (float)Remove1[0].Y / 999 * (img.Height - 2) + 1;
+                                            OpenCvSharp.Point startP = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                            OpenCvSharp.Point endP = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                            Cv2.Line(img, endP, startP, Scalar.Red, 1);
+                                        }
+                                    }
+                                }
+                                if (Remove2.Count >= 2)
+                                {
+                                    float startPX = 0, startPY = 0, endPX = 0, endPY = 0;
+                                    for (i = 0; i < Remove2.Count - 1; i++)
+                                    {
+                                        //(btnLocX - skinPictureBox1.Location.X) / skinPictureBox1.Width * 999;
+                                        startPX = (float)Remove2[i].X / 999 * (img.Width - 2) + 1;
+                                        startPY = (float)Remove2[i].Y / 999 * (img.Height - 2) + 1;
+                                        endPX = (float)Remove2[i + 1].X / 999 * (img.Width - 2) + 1;
+                                        endPY = (float)Remove2[i + 1].Y / 999 * (img.Height - 2) + 1;
+                                        OpenCvSharp.Point startP0 = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                        OpenCvSharp.Point endP0 = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                        Cv2.Line(img, startP0, endP0, Scalar.Red, 1);
+                                        if ((i + 1 == ign2 - 1) || ((i + 1 == Remove2.Count - 1) && ign2 == 0))
+                                        {
+                                            startPX = (float)Remove2[0].X / 999 * (img.Width - 2) + 1;
+                                            startPY = (float)Remove2[0].Y / 999 * (img.Height - 2) + 1;
+                                            OpenCvSharp.Point startP = new OpenCvSharp.Point(Convert.ToInt32(startPX), Convert.ToInt32(startPY));
+                                            OpenCvSharp.Point endP = new OpenCvSharp.Point(Convert.ToInt32(endPX), Convert.ToInt32(endPY));
+                                            Cv2.Line(img, endP, startP, Scalar.Red, 1);
+                                        }
                                     }
                                 }
                             }
@@ -278,7 +359,7 @@ namespace RemarkUI
             catch
             {
                 if (capture == null)
-                    MessageBox.Show("抓取线程错误", "提示", MessageBoxButtons.OK);
+                    MessageBox.Show("视频连接不稳定!", "提示", MessageBoxButtons.OK);
             }
         }
         //---------------------------------抓取并绘制图像
@@ -342,11 +423,10 @@ namespace RemarkUI
                     RemoveArea2.Text = "开始标记";
                     RemoveArea2.BaseColor = Color.FromArgb(0, 50, 0);
                     ClrThread = true;
-                    
                 }
                 catch
                 {
-                    MessageBox.Show("线程启动失败!", "提示", MessageBoxButtons.OK);
+                    MessageBox.Show("登陆失败!请检查网络与登录信息是否正确！", "提示", MessageBoxButtons.OK);
                 }
                 Send(CamIP, "#beibohdrop_GET#");
             }
@@ -355,13 +435,13 @@ namespace RemarkUI
 
         private void skinPictureBox1_Click(object sender, EventArgs e)
         {
-            if ((BTN.Count < Pnum || BTN.Count < ign1 || BTN.Count < ign2) && index != 0)
+            if ((BTN.Count < Pnum && index == 1) || (BTN.Count < ign1 && index == 2) || (BTN.Count < ign2 && index == 3))
             {
                 int btnLocX = MousePosition.X - this.Location.X;
                 int btnLocY = MousePosition.Y - this.Location.Y;
                 Button btn = new Button
                 {
-                    Location = new System.Drawing.Point(btnLocX-3, btnLocY-3),
+                    Location = new System.Drawing.Point(btnLocX - 3, btnLocY - 3),
                     Size = new System.Drawing.Size(8, 8)
                 };
                 btn.MouseDown += Button_MouseDown;
@@ -369,8 +449,8 @@ namespace RemarkUI
                 BTN.Add(btn);
                 this.Controls.Add(btn);
                 btn.BringToFront();
-                double UDPX = ((double)btn.Location.X - skinPictureBox1.Location.X + 3) / skinPictureBox1.Width * 999.9;
-                double UDPY = ((double)btn.Location.Y - skinPictureBox1.Location.Y + 3) / skinPictureBox1.Height * 999.9;
+                double UDPX = ((double)btn.Location.X - skinPictureBox1.Location.X + 3) / skinPictureBox1.Width * 999;
+                double UDPY = ((double)btn.Location.Y - skinPictureBox1.Location.Y + 3) / skinPictureBox1.Height * 999;
                 switch (index)
                 {
                     case 1:
@@ -431,7 +511,7 @@ namespace RemarkUI
 
         private void SendBtn_Click(object sender, EventArgs e)
         {
-            if ((BTN.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
+            if (((BTN.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0)) && !ISSave)
             {
                 MessageBox.Show("标记未完成！请先完成标记或取消标记后保存!", "提示", MessageBoxButtons.OK);
             }
@@ -486,6 +566,7 @@ namespace RemarkUI
                     if (skinCheckBox1.Checked && Remove1.Count >= 4)
                     {
                         UDPdata[22] = "1";
+                        UDPdata[24] = Remove1.Count.ToString();
                         UDPdata[26] = "";
                         UDPdata[28] = "";
                         UDPdata[30] = "";
@@ -516,6 +597,7 @@ namespace RemarkUI
                     if (skinCheckBox2.Checked && Remove2.Count >= 4)
                     {
                         UDPdata[32] = "1";
+                        UDPdata[34] = Remove2.Count.ToString();
                         UDPdata[36] = "";
                         UDPdata[38] = "";
                         UDPdata[40] = "";
@@ -538,7 +620,7 @@ namespace RemarkUI
                         UDPdata[32] = "0";
                         UDPdata[34] = "6";
                     }
-                        AllLocation.Text += UDPdata[36] + "\r\n";
+                    AllLocation.Text += UDPdata[36] + "\r\n";
                     AllLocation.Text += UDPdata[38] + "\r\n";
                     AllLocation.Text += UDPdata[40] + "\r\n";
 
@@ -556,7 +638,8 @@ namespace RemarkUI
                 catch
                 {
                     AllLocation.Text = testUDP.ToString();
-                    MessageBox.Show("提交失败！", "提示", MessageBoxButtons.OK); }
+                    MessageBox.Show("提交失败！", "提示", MessageBoxButtons.OK);
+                }
             }
         }
         //-------------------------------确认发送数据
@@ -576,14 +659,21 @@ namespace RemarkUI
                 MessageBox.Show("未登录 或 数据接收错误", "提示", MessageBoxButtons.OK);
             else
             {
-                PnumBox.SelectedIndex = -1;
-                ignorePnum1.SelectedIndex = -1;
-                ignorePnum2.SelectedIndex = -1;
+                index = 0;
+                PnumBox.Text = UDPdata[14];
+                ignorePnum1.Text = UDPdata[24];
+                ignorePnum2.Text = UDPdata[34];
                 BTN999.Clear();
                 Remove1.Clear();
                 Remove2.Clear();
+                for (int i = 0; i < BTN.Count; i++)
+                {
+                    this.Controls.Remove(BTN[i]);
+                }
+                BTN.Clear();
                 if (UDPdata[14] != "0")
                 {
+                    PnumBox.Text = UDPdata[14];
                     for (int i = 0; i < Convert.ToInt32(UDPdata[14]) * 2; i++)
                     {
                         int beginX = Convert.ToInt32(UDPBTN[i]);
@@ -594,6 +684,7 @@ namespace RemarkUI
                 }
                 if (UDPdata[22] != "0" && UDPdata[24] != "0")
                 {
+                    ignorePnum1.Text = UDPdata[24];
                     for (int i = 0; i < Convert.ToInt32(UDPdata[24]) * 2; i++)
                     {
                         int beginX = Convert.ToInt32(UDPRemove1[i]);
@@ -604,7 +695,8 @@ namespace RemarkUI
                 }
                 if (UDPdata[32] != "0" && UDPdata[34] != "0")
                 {
-                    for (int i = 0; i < Convert.ToInt32(UDPdata[14]) * 2; i++)
+                    ignorePnum2.Text = UDPdata[34];
+                    for (int i = 0; i < Convert.ToInt32(UDPdata[34]) * 2; i++)
                     {
                         int beginX = Convert.ToInt32(UDPRemove2[i]);
                         i++;
@@ -612,30 +704,36 @@ namespace RemarkUI
                         Remove2.Add(new System.Drawing.Point(beginX, beginY));
                     }
                 }
+                Pnum = BTN999.Count();
+                ign1 = Remove1.Count();
+                ign2 = Remove2.Count();
+                ShowConfig = true;
                 if (BTN999.Count != 0)
                 {
-                    Concert.Text = "查看标记";
-                    Concert.BaseColor = Color.FromArgb(50,50,0);
+                    Concert.Text = "编辑标记";
+                    Concert.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (Remove1.Count != 0 && UDPdata[22] != "0")
                 {
                     skinCheckBox1.CheckState = CheckState.Checked;
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 else
                 {
+                    skinCheckBox1.CheckState = CheckState.Unchecked;
                     RemoveArea1.Text = "开始标记";
                     RemoveArea1.BaseColor = Color.FromArgb(0, 50, 0);
                 }
                 if (Remove2.Count != 0 && UDPdata[32] != "0")
                 {
                     skinCheckBox2.CheckState = CheckState.Checked;
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 else
                 {
+                    skinCheckBox2.CheckState = CheckState.Unchecked;
                     RemoveArea2.Text = "开始标记";
                     RemoveArea2.BaseColor = Color.FromArgb(0, 50, 0);
                 }
@@ -660,6 +758,7 @@ namespace RemarkUI
 
         private void SaveNow_Click(object sender, EventArgs e)
         {
+            ISSave = true;
             if ((BTN999.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
             {
                 MessageBox.Show("当前标记未完成！\n请先完成标记或取消后保存!", "提示", MessageBoxButtons.OK);
@@ -670,33 +769,50 @@ namespace RemarkUI
             }
             else
             {
-
-                if ((BTN.Count == Pnum || BTN.Count == BTN999.Count)&& BTN999.Count >= 4)
+                ShowConfig = true;
+                if ((BTN.Count == Pnum || BTN.Count == BTN999.Count) && BTN999.Count >= 4)
                 {
-                    Concert.Text = "查看标记";
+                    Concert.Text = "编辑标记";
                     Concert.BaseColor = Color.FromArgb(50, 50, 0);
                 }
-                if ((BTN.Count == ign1 || BTN.Count == Remove1.Count)&& Remove1.Count >= 4)
+                if ((BTN.Count == ign1 || BTN.Count == Remove1.Count) && Remove1.Count >= 4)
                 {
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
-                if ((BTN.Count == ign2 || BTN.Count == Remove2.Count)&& Remove2.Count >= 4)
+                if ((BTN.Count == ign2 || BTN.Count == Remove2.Count) && Remove2.Count >= 4)
                 {
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
-                Pnum = 0;
-                ign1 = 0;
-                ign2 = 0;
                 for (int i = 0; i < BTN.Count; i++)
                 {
                     this.Controls.Remove(BTN[i]);
                 }
                 BTN.Clear();
-                PnumBox.SelectedIndex = -1;
-                ignorePnum1.SelectedIndex = -1;
-                ignorePnum2.SelectedIndex = -1;
+                AllLocation.Text = "保存成功！\r\n";
+                AllLocation.Text += "原警戒区点数：" + UDPdata[14] + ";\r\n";
+                AllLocation.Text += "更改后警戒区点数：" + BTN999.Count.ToString() + ";\r\n\r\n";
+                if (skinCheckBox1.Checked)
+                {
+                    AllLocation.Text += "屏蔽区1:已启用" + ";\r\n";
+                    AllLocation.Text += "原屏蔽区1点数：" + UDPdata[24] + ";\r\n";
+                    AllLocation.Text += "更改后屏蔽区1点数：" + Remove1.Count.ToString() + ";\r\n\r\n";
+                }
+                else
+                    AllLocation.Text += "屏蔽区1:未启用\r\n\r\n";
+                if (skinCheckBox2.Checked)
+                {
+                    AllLocation.Text += "屏蔽区2:已启用" + ";\r\n";
+                    AllLocation.Text += "原屏蔽区2点数：" + UDPdata[34] + ";\r\n";
+                    AllLocation.Text += "更改后屏蔽区2点数：" + Remove2.Count.ToString() + ";\r\n\r\n";
+                }
+                else
+                    AllLocation.Text += "屏蔽区2:未启用\r\n\r\n";
+                AllLocation.Text += "若要放弃更改，请点击查看当前相机配置！确认无误可点击提交更改。";
+                PnumBox.Text = BTN999.Count.ToString();
+                ignorePnum1.Text = Remove1.Count.ToString();
+                ignorePnum2.Text = Remove2.Count.ToString();
                 showCount.Text = "未启用标记...";
             }
         }
@@ -705,30 +821,27 @@ namespace RemarkUI
 
         private void Concert_Click(object sender, EventArgs e)
         {
+            ShowConfig = false;
+            ISSave = false;
+            index = 1;
             if (PnumBox.Text == "" && BTN999.Count == 0)
             {
                 MessageBox.Show("请选择标记点数", "提示", MessageBoxButtons.OK);
             }
-            else if ((BTN999.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
+            else if ((Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
             {
                 MessageBox.Show("当前标记未完成！\n请先完成标记或取消后保存!", "提示", MessageBoxButtons.OK);
             }
-            else if (BTN999.Count != 0 && Concert.Text != "查看标记")     //当已启用标记时,重置数据和按键状态
-            {
-                AllLocation.Text = "";
-                ReloadALL(1);
-                index = 0;
-            }
-            else if (Concert.Text == "查看标记")
+            else if (Concert.Text == "编辑标记")
             {
                 if (RemoveArea1.Text == "重新标记")
                 {
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (RemoveArea2.Text == "重新标记")
                 {
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 PnumBox.Text = BTN999.Count.ToString();
@@ -749,6 +862,8 @@ namespace RemarkUI
                         Location = new System.Drawing.Point((int)btnLocX, (int)btnLocY),
                         Size = new System.Drawing.Size(8, 8)
                     };
+                    btn.MouseDown += Button_MouseDown;
+                    btn.MouseMove += Button_MouseMove;
                     BTN.Add(btn);
                     this.Controls.Add(btn);
                     btn.BringToFront();
@@ -761,60 +876,59 @@ namespace RemarkUI
             {
                 if (RemoveArea1.Text == "重新标记")
                 {
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (RemoveArea2.Text == "重新标记")
                 {
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
-                Pnum = 0;
-                ign1 = 0;
-                ign2 = 0;
-                ignorePnum1.SelectedIndex = -1;
-                ignorePnum2.SelectedIndex = -1;
                 for (int i = 0; i < BTN.Count; i++)
                 {
                     this.Controls.Remove(BTN[i]);
                 }
                 AllLocation.Text = "";
                 BTN.Clear();
+                BTN999.Clear();
                 Pnum = Convert.ToInt32(PnumBox.Text);//获取需要的点数
                 showCount.Text = "标记就绪...";
                 Concert.Text = "重新标记";
                 Concert.BaseColor = Color.FromArgb(50, 0, 0);
-                index = 1;
             }
         }
         //---------------------------------确认开始画算法区域
         private void RemoveArea1_Click(object sender, EventArgs e)
         {
+            ShowConfig = false;
+            ISSave = false;
+            index = 2;
             if (ignorePnum1.Text == "" && Remove1.Count == 0)
             {
                 MessageBox.Show("请选择标记点数", "提示", MessageBoxButtons.OK);
             }
-            else if ((BTN999.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
+            else if ((BTN999.Count != Pnum && Pnum != 0) || (Remove2.Count != ign2 && ign2 != 0))
             {
                 MessageBox.Show("当前标记未完成！\n请先完成标记或取消后保存!", "提示", MessageBoxButtons.OK);
             }
-            else if (Remove1.Count != 0 && RemoveArea1.Text != "查看标记")     //当已启用标记时,重置数据和按键状态
+            /*else if (Remove1.Count != 0 && RemoveArea1.Text != "编辑标记")     //当已启用标记时,重置数据和按键状态
             {
                 AllLocation.Text = "";
                 ReloadALL(2);
                 index = 0;
             }
-            else if (RemoveArea1.Text == "查看标记")
+            */
+            else if (RemoveArea1.Text == "编辑标记")
             {
                 if (Concert.Text == "重新标记")
                 {
-                    Concert.Text = "查看标记";
+                    Concert.Text = "编辑标记";
                     Concert.BaseColor = Color.FromArgb(50, 50, 0);
 
                 }
                 if (RemoveArea2.Text == "重新标记")
                 {
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 ignorePnum1.Text = Remove1.Count.ToString();
@@ -835,6 +949,8 @@ namespace RemarkUI
                         Location = new System.Drawing.Point((int)btnLocX, (int)btnLocY),
                         Size = new System.Drawing.Size(8, 8)
                     };
+                    btn.MouseDown += Button_MouseDown;
+                    btn.MouseMove += Button_MouseMove;
                     BTN.Add(btn);
                     this.Controls.Add(btn);
                     btn.BringToFront();
@@ -847,12 +963,12 @@ namespace RemarkUI
             {
                 if (Concert.Text == "重新标记")
                 {
-                    Concert.Text = "查看标记";
+                    Concert.Text = "编辑标记";
                     Concert.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (RemoveArea2.Text == "重新标记")
                 {
-                    RemoveArea2.Text = "查看标记";
+                    RemoveArea2.Text = "编辑标记";
                     RemoveArea2.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 Pnum = 0;
@@ -866,40 +982,43 @@ namespace RemarkUI
                 }
                 AllLocation.Text = "";
                 BTN.Clear();
+                Remove1.Clear();
                 ign1 = Convert.ToInt32(ignorePnum1.Text);//获取需要的点数
                 showCount.Text = "标记就绪...";
                 RemoveArea1.Text = "重新标记";
                 RemoveArea1.BaseColor = Color.FromArgb(50, 0, 0);
-                index = 2;
             }
         }
         //---------------------------------确认开始画屏蔽区域1
         private void RemoveArea2_Click(object sender, EventArgs e)
         {
+            ShowConfig = false;
+            ISSave = false;
+            index = 3;
             if (ignorePnum2.Text == "" && Remove2.Count == 0)
             {
                 MessageBox.Show("请选择标记点数", "提示", MessageBoxButtons.OK);
             }
-            else if ((BTN999.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0) || (Remove2.Count != ign2 && ign2 != 0))
+            else if ((BTN999.Count != Pnum && Pnum != 0) || (Remove1.Count != ign1 && ign1 != 0))
             {
                 MessageBox.Show("当前标记未完成！\n请先完成标记或取消后保存!", "提示", MessageBoxButtons.OK);
             }
-            else if (Remove2.Count != 0 && RemoveArea2.Text != "查看标记")     //当已启用标记时,重置数据和按键状态
+            /*else if (Remove2.Count != 0 && RemoveArea2.Text != "编辑标记")     //当已启用标记时,重置数据和按键状态
             {
                 AllLocation.Text = "";
                 ReloadALL(3);
                 index = 0;
-            }
-            else if (RemoveArea2.Text == "查看标记")
+            }*/
+            else if (RemoveArea2.Text == "编辑标记")
             {
                 if (RemoveArea1.Text == "重新标记")
                 {
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (Concert.Text == "重新标记")
                 {
-                    Concert.Text = "查看标记";
+                    Concert.Text = "编辑标记";
                     Concert.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 ignorePnum2.Text = Remove2.Count.ToString();
@@ -920,6 +1039,8 @@ namespace RemarkUI
                         Location = new System.Drawing.Point((int)btnLocX, (int)btnLocY),
                         Size = new System.Drawing.Size(8, 8)
                     };
+                    btn.MouseDown += Button_MouseDown;
+                    btn.MouseMove += Button_MouseMove;
                     BTN.Add(btn);
                     this.Controls.Add(btn);
                     btn.BringToFront();
@@ -932,32 +1053,33 @@ namespace RemarkUI
             {
                 if (RemoveArea1.Text == "重新标记")
                 {
-                    RemoveArea1.Text = "查看标记";
+                    RemoveArea1.Text = "编辑标记";
                     RemoveArea1.BaseColor = Color.FromArgb(50, 50, 0);
                 }
                 if (Concert.Text == "重新标记")
                 {
-                    Concert.Text = "查看标记";
+                    Concert.Text = "编辑标记";
                     Concert.BaseColor = Color.FromArgb(50, 50, 0);
                 }
-                Pnum = 0;
-                ign1 = 0;
-                ign2 = 0;
                 PnumBox.SelectedIndex = -1;
                 ignorePnum1.SelectedIndex = -1;
                 for (int i = 0; i < BTN.Count; i++)
                 {
                     this.Controls.Remove(BTN[i]);
                 }
+                Pnum = 0;
+                ign1 = 0;
+                ign2 = 0;
                 AllLocation.Text = "";
                 BTN.Clear();
+                Remove2.Clear();
                 ign2 = Convert.ToInt32(ignorePnum2.Text);//获取需要的点数
                 showCount.Text = "标记就绪...";
                 RemoveArea2.Text = "重新标记";
                 RemoveArea2.BaseColor = Color.FromArgb(50, 0, 0);
-                index = 3;
             }
         }
+
         //---------------------------------确认开始画屏蔽区域2
 
 
@@ -975,10 +1097,10 @@ namespace RemarkUI
             {
                 posX = B.Location.X + (e.X - location.X);
                 posY = B.Location.Y + (e.Y - location.Y);
-                if (posX > skinPictureBox1.Location.X && posY > skinPictureBox1.Location.Y &&
-                posX < skinPictureBox1.Location.X + skinPictureBox1.Width && posY < skinPictureBox1.Location.Y + skinPictureBox1.Height)
+                if (posX >= skinPictureBox1.Location.X && posY >= skinPictureBox1.Location.Y &&
+                posX <= skinPictureBox1.Location.X + skinPictureBox1.Width && posY <= skinPictureBox1.Location.Y + skinPictureBox1.Height)
                 {
-                    B.Location = new System.Drawing.Point(posX-3, posY-3);
+                    B.Location = new System.Drawing.Point(posX - 3, posY - 3);
                 }
                 switch (index)
                 {
@@ -995,8 +1117,8 @@ namespace RemarkUI
                 AllLocation.Text = "";
                 for (int i = 0; i < BTN.Count; i++)
                 {
-                    double UDPX = ((double)BTN[i].Location.X - skinPictureBox1.Location.X + 3) / skinPictureBox1.Width * 999.9;
-                    double UDPY = ((double)BTN[i].Location.Y - skinPictureBox1.Location.Y + 3) / skinPictureBox1.Height * 999.9;
+                    double UDPX = ((double)BTN[i].Location.X - skinPictureBox1.Location.X + 3) / skinPictureBox1.Width * 999;
+                    double UDPY = ((double)BTN[i].Location.Y - skinPictureBox1.Location.Y + 3) / skinPictureBox1.Height * 999;
                     switch (index)
                     {
                         case 1:

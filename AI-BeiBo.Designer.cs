@@ -287,12 +287,12 @@ namespace RemarkUI
             this.LoginBtn.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.LoginBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LoginBtn.DownBack = null;
-            this.LoginBtn.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.LoginBtn.Font = new System.Drawing.Font("幼圆", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.LoginBtn.ForeColor = System.Drawing.Color.White;
             this.LoginBtn.GlowColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.LoginBtn.InnerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.LoginBtn.Location = new System.Drawing.Point(961, 10);
-            this.LoginBtn.Margin = new System.Windows.Forms.Padding(40, 10, 0, 3);
+            this.LoginBtn.Location = new System.Drawing.Point(951, 10);
+            this.LoginBtn.Margin = new System.Windows.Forms.Padding(30, 10, 0, 3);
             this.LoginBtn.MouseBack = null;
             this.LoginBtn.Name = "LoginBtn";
             this.LoginBtn.NormlBack = null;
@@ -311,16 +311,16 @@ namespace RemarkUI
             this.reset.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.reset.Cursor = System.Windows.Forms.Cursors.Hand;
             this.reset.DownBack = null;
-            this.reset.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.reset.Font = new System.Drawing.Font("幼圆", 10.5F, System.Drawing.FontStyle.Bold);
             this.reset.ForeColor = System.Drawing.Color.White;
             this.reset.GlowColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.reset.InnerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.reset.Location = new System.Drawing.Point(1096, 10);
-            this.reset.Margin = new System.Windows.Forms.Padding(25, 10, 3, 3);
+            this.reset.Location = new System.Drawing.Point(20, 53);
+            this.reset.Margin = new System.Windows.Forms.Padding(20, 10, 3, 3);
             this.reset.MouseBack = null;
             this.reset.Name = "reset";
             this.reset.NormlBack = null;
-            this.reset.Size = new System.Drawing.Size(145, 30);
+            this.reset.Size = new System.Drawing.Size(187, 30);
             this.reset.TabIndex = 80;
             this.reset.Text = "查看当前相机配置";
             this.reset.UseVisualStyleBackColor = false;
@@ -377,10 +377,10 @@ namespace RemarkUI
             this.skinLabel5.BorderSize = 2;
             this.skinLabel5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel5.ForeColor = System.Drawing.Color.White;
-            this.skinLabel5.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel5.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel5.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel5.Name = "skinLabel5";
-            this.skinLabel5.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel5.Size = new System.Drawing.Size(150, 18);
             this.skinLabel5.TabIndex = 0;
             this.skinLabel5.Text = "灵敏度阈值：";
             // 
@@ -388,9 +388,10 @@ namespace RemarkUI
             // 
             this.threshold.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.threshold.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.threshold.Location = new System.Drawing.Point(144, 3);
+            this.threshold.Location = new System.Drawing.Point(150, 3);
+            this.threshold.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.threshold.Name = "threshold";
-            this.threshold.Size = new System.Drawing.Size(50, 28);
+            this.threshold.Size = new System.Drawing.Size(35, 28);
             this.threshold.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.threshold, "请输入0~100的整数");
             this.threshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -416,19 +417,20 @@ namespace RemarkUI
             this.skinLabel6.BorderSize = 2;
             this.skinLabel6.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel6.ForeColor = System.Drawing.Color.White;
-            this.skinLabel6.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel6.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel6.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel6.Name = "skinLabel6";
-            this.skinLabel6.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel6.Size = new System.Drawing.Size(150, 18);
             this.skinLabel6.TabIndex = 1;
             this.skinLabel6.Text = "去抖动级别：";
             // 
             // jitter
             // 
             this.jitter.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.jitter.Location = new System.Drawing.Point(144, 3);
+            this.jitter.Location = new System.Drawing.Point(150, 3);
+            this.jitter.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.jitter.Name = "jitter";
-            this.jitter.Size = new System.Drawing.Size(50, 28);
+            this.jitter.Size = new System.Drawing.Size(35, 28);
             this.jitter.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.jitter, "请输入1~6的整数");
             this.jitter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -452,21 +454,22 @@ namespace RemarkUI
             this.skinLabel7.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel7.BorderColor = System.Drawing.Color.Black;
             this.skinLabel7.BorderSize = 2;
-            this.skinLabel7.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel7.Font = new System.Drawing.Font("宋体", 11.8F, System.Drawing.FontStyle.Bold);
             this.skinLabel7.ForeColor = System.Drawing.Color.White;
-            this.skinLabel7.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel7.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel7.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel7.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel7.Name = "skinLabel7";
-            this.skinLabel7.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel7.Size = new System.Drawing.Size(150, 18);
             this.skinLabel7.TabIndex = 1;
             this.skinLabel7.Text = "最小高度阈值：";
             // 
             // min_alarm_h_radio
             // 
             this.min_alarm_h_radio.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.min_alarm_h_radio.Location = new System.Drawing.Point(144, 3);
+            this.min_alarm_h_radio.Location = new System.Drawing.Point(150, 3);
+            this.min_alarm_h_radio.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.min_alarm_h_radio.Name = "min_alarm_h_radio";
-            this.min_alarm_h_radio.Size = new System.Drawing.Size(50, 28);
+            this.min_alarm_h_radio.Size = new System.Drawing.Size(35, 28);
             this.min_alarm_h_radio.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.min_alarm_h_radio, "请输入0~100的整数");
             this.min_alarm_h_radio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -492,19 +495,20 @@ namespace RemarkUI
             this.skinLabel8.BorderSize = 2;
             this.skinLabel8.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel8.ForeColor = System.Drawing.Color.White;
-            this.skinLabel8.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel8.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel8.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel8.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel8.Name = "skinLabel8";
-            this.skinLabel8.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel8.Size = new System.Drawing.Size(150, 18);
             this.skinLabel8.TabIndex = 1;
             this.skinLabel8.Text = "宽高比阈值：";
             // 
             // hw_radio
             // 
             this.hw_radio.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.hw_radio.Location = new System.Drawing.Point(144, 3);
+            this.hw_radio.Location = new System.Drawing.Point(150, 3);
+            this.hw_radio.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.hw_radio.Name = "hw_radio";
-            this.hw_radio.Size = new System.Drawing.Size(50, 28);
+            this.hw_radio.Size = new System.Drawing.Size(35, 28);
             this.hw_radio.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.hw_radio, "请输入0~10的整数");
             this.hw_radio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -530,19 +534,20 @@ namespace RemarkUI
             this.skinLabel9.BorderSize = 2;
             this.skinLabel9.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel9.ForeColor = System.Drawing.Color.White;
-            this.skinLabel9.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel9.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel9.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel9.Name = "skinLabel9";
-            this.skinLabel9.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel9.Size = new System.Drawing.Size(150, 18);
             this.skinLabel9.TabIndex = 1;
             this.skinLabel9.Text = "静止阈值：";
             // 
             // max_contours_result
             // 
             this.max_contours_result.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.max_contours_result.Location = new System.Drawing.Point(144, 3);
+            this.max_contours_result.Location = new System.Drawing.Point(150, 3);
+            this.max_contours_result.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.max_contours_result.Name = "max_contours_result";
-            this.max_contours_result.Size = new System.Drawing.Size(50, 28);
+            this.max_contours_result.Size = new System.Drawing.Size(35, 28);
             this.max_contours_result.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.max_contours_result, "请输入0~100的整数");
             this.max_contours_result.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -568,19 +573,20 @@ namespace RemarkUI
             this.skinLabel10.BorderSize = 2;
             this.skinLabel10.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel10.ForeColor = System.Drawing.Color.White;
-            this.skinLabel10.Location = new System.Drawing.Point(3, 5);
-            this.skinLabel10.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.skinLabel10.Location = new System.Drawing.Point(0, 5);
+            this.skinLabel10.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.skinLabel10.Name = "skinLabel10";
-            this.skinLabel10.Size = new System.Drawing.Size(135, 18);
+            this.skinLabel10.Size = new System.Drawing.Size(150, 18);
             this.skinLabel10.TabIndex = 1;
             this.skinLabel10.Text = "面积阈值：";
             // 
             // aera_radio
             // 
             this.aera_radio.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.aera_radio.Location = new System.Drawing.Point(144, 3);
+            this.aera_radio.Location = new System.Drawing.Point(150, 3);
+            this.aera_radio.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.aera_radio.Name = "aera_radio";
-            this.aera_radio.Size = new System.Drawing.Size(50, 28);
+            this.aera_radio.Size = new System.Drawing.Size(35, 28);
             this.aera_radio.TabIndex = 80;
             this.skinToolTip1.SetToolTip(this.aera_radio, "请输入0~100的整数");
             this.aera_radio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_Limit);
@@ -591,8 +597,8 @@ namespace RemarkUI
             this.showCount.BorderColor = System.Drawing.Color.DimGray;
             this.showCount.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.showCount.ForeColor = System.Drawing.Color.White;
-            this.showCount.Location = new System.Drawing.Point(5, 226);
-            this.showCount.Margin = new System.Windows.Forms.Padding(5, 10, 0, 0);
+            this.showCount.Location = new System.Drawing.Point(5, 224);
+            this.showCount.Margin = new System.Windows.Forms.Padding(5, 8, 0, 0);
             this.showCount.Name = "showCount";
             this.showCount.Size = new System.Drawing.Size(100, 15);
             this.showCount.TabIndex = 69;
@@ -608,8 +614,8 @@ namespace RemarkUI
             this.AllLocation.IsPasswordChat = '\0';
             this.AllLocation.IsSystemPasswordChar = false;
             this.AllLocation.Lines = new string[0];
-            this.AllLocation.Location = new System.Drawing.Point(10, 241);
-            this.AllLocation.Margin = new System.Windows.Forms.Padding(10, 0, 10, 20);
+            this.AllLocation.Location = new System.Drawing.Point(8, 239);
+            this.AllLocation.Margin = new System.Windows.Forms.Padding(8, 0, 10, 20);
             this.AllLocation.MaxLength = 32767;
             this.AllLocation.MinimumSize = new System.Drawing.Size(28, 28);
             this.AllLocation.MouseBack = null;
@@ -619,8 +625,8 @@ namespace RemarkUI
             this.AllLocation.NormlBack = null;
             this.AllLocation.Padding = new System.Windows.Forms.Padding(5);
             this.AllLocation.ReadOnly = true;
-            this.AllLocation.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.AllLocation.Size = new System.Drawing.Size(180, 70);
+            this.AllLocation.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.AllLocation.Size = new System.Drawing.Size(185, 85);
             // 
             // 
             // 
@@ -631,7 +637,8 @@ namespace RemarkUI
             this.AllLocation.SkinTxt.Multiline = true;
             this.AllLocation.SkinTxt.Name = "BaseText";
             this.AllLocation.SkinTxt.ReadOnly = true;
-            this.AllLocation.SkinTxt.Size = new System.Drawing.Size(166, 56);
+            this.AllLocation.SkinTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.AllLocation.SkinTxt.Size = new System.Drawing.Size(171, 71);
             this.AllLocation.SkinTxt.TabIndex = 0;
             this.AllLocation.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.AllLocation.SkinTxt.WaterText = "";
@@ -648,7 +655,7 @@ namespace RemarkUI
             this.skinFlowLayoutPanel4.Controls.Add(this.PnumBox);
             this.skinFlowLayoutPanel4.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.skinFlowLayoutPanel4.DownBack = null;
-            this.skinFlowLayoutPanel4.Location = new System.Drawing.Point(3, 334);
+            this.skinFlowLayoutPanel4.Location = new System.Drawing.Point(3, 347);
             this.skinFlowLayoutPanel4.MouseBack = null;
             this.skinFlowLayoutPanel4.Name = "skinFlowLayoutPanel4";
             this.skinFlowLayoutPanel4.NormlBack = null;
@@ -689,7 +696,7 @@ namespace RemarkUI
             this.skinFlowLayoutPanel5.Controls.Add(this.Concert);
             this.skinFlowLayoutPanel5.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.skinFlowLayoutPanel5.DownBack = null;
-            this.skinFlowLayoutPanel5.Location = new System.Drawing.Point(3, 370);
+            this.skinFlowLayoutPanel5.Location = new System.Drawing.Point(3, 383);
             this.skinFlowLayoutPanel5.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.skinFlowLayoutPanel5.MouseBack = null;
             this.skinFlowLayoutPanel5.Name = "skinFlowLayoutPanel5";
@@ -728,7 +735,7 @@ namespace RemarkUI
             this.skinFlowLayoutPanel17.Controls.Add(this.skinFlowLayoutPanel14);
             this.skinFlowLayoutPanel17.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.skinFlowLayoutPanel17.DownBack = null;
-            this.skinFlowLayoutPanel17.Location = new System.Drawing.Point(3, 420);
+            this.skinFlowLayoutPanel17.Location = new System.Drawing.Point(3, 433);
             this.skinFlowLayoutPanel17.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.skinFlowLayoutPanel17.MouseBack = null;
             this.skinFlowLayoutPanel17.Name = "skinFlowLayoutPanel17";
@@ -756,11 +763,11 @@ namespace RemarkUI
             this.skinLabel11.AutoSize = true;
             this.skinLabel11.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel11.BorderColor = System.Drawing.Color.DimGray;
-            this.skinLabel11.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel11.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Bold);
             this.skinLabel11.ForeColor = System.Drawing.Color.White;
             this.skinLabel11.Location = new System.Drawing.Point(3, 0);
             this.skinLabel11.Name = "skinLabel11";
-            this.skinLabel11.Size = new System.Drawing.Size(146, 20);
+            this.skinLabel11.Size = new System.Drawing.Size(140, 19);
             this.skinLabel11.TabIndex = 4;
             this.skinLabel11.Text = "屏蔽区1点数：";
             // 
@@ -773,7 +780,7 @@ namespace RemarkUI
             "4",
             "5",
             "6"});
-            this.ignorePnum1.Location = new System.Drawing.Point(3, 23);
+            this.ignorePnum1.Location = new System.Drawing.Point(149, 3);
             this.ignorePnum1.Name = "ignorePnum1";
             this.ignorePnum1.Size = new System.Drawing.Size(45, 26);
             this.ignorePnum1.TabIndex = 3;
@@ -843,7 +850,7 @@ namespace RemarkUI
             this.skinFlowLayoutPanel18.Controls.Add(this.skinFlowLayoutPanel16);
             this.skinFlowLayoutPanel18.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.skinFlowLayoutPanel18.DownBack = null;
-            this.skinFlowLayoutPanel18.Location = new System.Drawing.Point(3, 505);
+            this.skinFlowLayoutPanel18.Location = new System.Drawing.Point(3, 518);
             this.skinFlowLayoutPanel18.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.skinFlowLayoutPanel18.MouseBack = null;
             this.skinFlowLayoutPanel18.Name = "skinFlowLayoutPanel18";
@@ -871,11 +878,11 @@ namespace RemarkUI
             this.skinLabel12.AutoSize = true;
             this.skinLabel12.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel12.BorderColor = System.Drawing.Color.DimGray;
-            this.skinLabel12.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel12.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Bold);
             this.skinLabel12.ForeColor = System.Drawing.Color.White;
             this.skinLabel12.Location = new System.Drawing.Point(3, 0);
             this.skinLabel12.Name = "skinLabel12";
-            this.skinLabel12.Size = new System.Drawing.Size(146, 20);
+            this.skinLabel12.Size = new System.Drawing.Size(140, 19);
             this.skinLabel12.TabIndex = 4;
             this.skinLabel12.Text = "屏蔽区2点数：";
             // 
@@ -888,7 +895,7 @@ namespace RemarkUI
             "4",
             "5",
             "6"});
-            this.ignorePnum2.Location = new System.Drawing.Point(3, 23);
+            this.ignorePnum2.Location = new System.Drawing.Point(149, 3);
             this.ignorePnum2.Name = "ignorePnum2";
             this.ignorePnum2.Size = new System.Drawing.Size(45, 26);
             this.ignorePnum2.TabIndex = 3;
@@ -958,7 +965,7 @@ namespace RemarkUI
             this.ShowTest.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ShowTest.ForeColor = System.Drawing.Color.White;
             this.ShowTest.LightEffectBack = System.Drawing.Color.Black;
-            this.ShowTest.Location = new System.Drawing.Point(3, 588);
+            this.ShowTest.Location = new System.Drawing.Point(3, 601);
             this.ShowTest.MouseBack = null;
             this.ShowTest.Name = "ShowTest";
             this.ShowTest.NormlBack = null;
@@ -982,14 +989,14 @@ namespace RemarkUI
             this.SaveNow.ForeColor = System.Drawing.Color.White;
             this.SaveNow.GlowColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.SaveNow.InnerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.SaveNow.Location = new System.Drawing.Point(25, 631);
+            this.SaveNow.Location = new System.Drawing.Point(25, 644);
             this.SaveNow.Margin = new System.Windows.Forms.Padding(25, 20, 0, 3);
             this.SaveNow.MouseBack = null;
             this.SaveNow.Name = "SaveNow";
             this.SaveNow.NormlBack = null;
             this.SaveNow.Size = new System.Drawing.Size(150, 30);
             this.SaveNow.TabIndex = 87;
-            this.SaveNow.Text = "暂存当前更改";
+            this.SaveNow.Text = "确认修改内容";
             this.SaveNow.UseVisualStyleBackColor = false;
             this.SaveNow.Click += new System.EventHandler(this.SaveNow_Click);
             // 
@@ -1005,7 +1012,7 @@ namespace RemarkUI
             this.SendBtn.ForeColor = System.Drawing.Color.White;
             this.SendBtn.GlowColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.SendBtn.InnerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.SendBtn.Location = new System.Drawing.Point(25, 684);
+            this.SendBtn.Location = new System.Drawing.Point(25, 697);
             this.SendBtn.Margin = new System.Windows.Forms.Padding(25, 20, 0, 3);
             this.SendBtn.MouseBack = null;
             this.SendBtn.Name = "SendBtn";
