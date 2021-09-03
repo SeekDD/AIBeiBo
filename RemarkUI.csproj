@@ -65,9 +65,8 @@
     <ApplicationIcon>logo-min.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSkin, Version=16.1.14.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\CSkin.dll</HintPath>
+    <Reference Include="CSkin">
+      <HintPath>.\CSkin.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp">
       <HintPath>OpenCv\lib\net40\OpenCvSharp.dll</HintPath>
